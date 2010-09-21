@@ -6,6 +6,7 @@ var count = 0;
 
 function addItem(n){
     pattern.push(n);
+    addItemToList(n);
     count = count + 1;
     if(check()){
 	return compare();
@@ -32,4 +33,10 @@ function check(){
 	return false;
 }
 
+function addItemToList(n){
+    var x = document.getElementById('list_items');
+    var e = document.createElement('li');
+    e.innerHTML = n;
+    x.appendChild(e);
+}
 
