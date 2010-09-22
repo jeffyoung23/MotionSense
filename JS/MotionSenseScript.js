@@ -21,6 +21,7 @@ function compare(){
 	    if(pattern[i]!=answer[i]){
 		console.log("inside if statement");
 		status = false;
+		window.location = "http://www.espn.com/"
 	    }
 	}
     return status;
