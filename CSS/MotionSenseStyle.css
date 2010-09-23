@@ -17,6 +17,7 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 }
 
 body{
+font-family: 'Philosopher', arial, serif; 
 background:grey;
 }
 
@@ -32,7 +33,7 @@ border-radius: 15px;
 border: 1px solid #C4C4C4;
 box-shadow:-1px -1px 5px #000;
 -webkit-box-shadow:-1px -1px 5px #000;
--moz-box-shadow: -1px -1px 5px #000
+-moz-box-shadow: -1px -1px 5px #000;
 }
 
 #input_console{
@@ -41,34 +42,50 @@ width: 400px;
 margin-top:50px;
 height:400px;
 background: blue;
-box-shadow:-1px -1px 5px #000;
--webkit-box-shadow:-1px -1px 5px #000;
--moz-box-shadow: -1px -1px 5px #000
 -moz-border-radius: 15px;
 border-radius: 15px;
+border: 0px solid #C4C4C4;
+box-shadow:-1px -1px 5px #000;
+-webkit-box-shadow:-1px -1px 5px #000;
+-moz-box-shadow: -1px -1px 5px #000;
 }
 
 .input_item{
 float:left;
 background: white;
-box-shadow:-1px -1px 5px #000;
--webkit-box-shadow:-1px -1px 5px #000;
--moz-box-shadow: -1px -1px 5px #000
--moz-border-radius: 15px;
-border-radius: 15px;
 margin-left: 10px;
 margin-right:10px;
 margin-top:10px;
 margin-bottom:10px;
 height: 113px;
 width: 113px;
+-moz-border-radius: 15px;
+border-radius: 15px;
+border: 0px solid #C4C4C4;
+box-shadow:-1px -1px 5px #000;
+-webkit-box-shadow:-1px -1px 5px #000;
+-moz-box-shadow: -1px -1px 5px #000
 }
 
-#list_items{
+#item_text{
+text-align: center;
+vertical-align: middle;
+line-height: 113px;
+}
+
+#right_console{
 margin-left: 550px;
 margin-top: 150px;
 position: absolute;
-top:0;
+top: 0;
+}
+
+#title_item{
+
+}
+
+#list_items{
+margin-top: 15px;
 }
 
 #0{
