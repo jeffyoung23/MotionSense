@@ -5,37 +5,12 @@
  rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="CSS/MotionSenseStyle.css" type="text/css">
 <script src="JS/MotionSenseScript.js"></script> 
+<script src="JS/MotionSenseCanvas.js"></script>
 </head>
-<body>
+<body onload="draw();">
 <div id = "console">
-<div id = "input_console"
-<div id = "0" class = "input_item" onMouseOver = "addItem(0)" >
-<div id = "item_text">0</div>
-</div>
-<div id= "1" class = "input_item" onMouseOver = "addItem(1)" >
-<div id = "item_text">1</div>
-</div>
-<div id= "2" class = "input_item" onMouseOver = "addItem(2)" >
-<div id = "item_text">2</div>
-</div>
-<div id= "3" class = "input_item" onMouseOver = "addItem(3)">
-<div id = "item_text">3</div>
-</div>
-<div id= "4" class = "input_item" onMouseOver = "addItem(4)">
-<div id = "item_text">4</div>
-</div>
-<div id= "5" class = "input_item" onMouseOver = "addItem(5)">
-<div id = "item_text">5</div>
-</div>
-<div id= "6" class = "input_item" onMouseOver = "addItem(6)">
-<div id = "item_text">6</div>
-</div>
-<div id= "7" class = "input_item" onMouseOver = "addItem(7)">
-<div id = "item_text">7</div>
-</div>
-<div id= "8" class = "input_item" onMouseOver = "addItem(8)">
-<div id = "item_text">8</div>
-</div>
+<div id = "input_console">
+<canvas id="input_canvas" width="400" height="400"></canvas> 
 </div>
 <div id = "right_console">
 <div id = "title_item">Try mousing over the pattern 0,1,2,3,4,5,6,7,8 !!!</div>

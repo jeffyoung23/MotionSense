@@ -9,7 +9,9 @@ function addItem(n){
     addItemToList(n);
     count = count + 1;
     if(check()){
-	return compare();
+	if(compare()){
+	    window.location = "http://www.espn.com/";
+	}
     }
 }
 
@@ -21,7 +23,6 @@ function compare(){
 	    if(pattern[i]!=answer[i]){
 		console.log("inside if statement");
 		status = false;
-		window.location = "http://www.espn.com/"
 	    }
 	}
     return status;
