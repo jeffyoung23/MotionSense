@@ -42,3 +42,14 @@ function addItemToList(n){
     x.appendChild(e);
 }
 
+
+function saveImage(){
+
+    var canvas = document.getElementById("input_canvas");
+
+    var context = canvas.getContext("2d");
+
+    var img     = canvas.toDataURL("image/png");
+
+    document.write('<img src="'+img+'" id="save_image"/>');
+}
