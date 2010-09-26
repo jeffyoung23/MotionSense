@@ -51,5 +51,12 @@ function saveImage(){
 
     var img     = canvas.toDataURL("image/png");
 
-    document.write('<img src="'+img+'" id="save_image"/>');
+
+    var x = document.getElementById('saved_images');
+    var e = document.createElement('img');
+    e.src = img;
+    e.id = "save_image";
+    e.style.width = "200px";
+    e.style.height = "200px";
+    x.appendChild(e);
 }
