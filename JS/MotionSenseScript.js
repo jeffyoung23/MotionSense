@@ -60,3 +60,13 @@ function saveImage(){
     e.style.height = "200px";
     x.appendChild(e);
 }
+
+function clear_canvas(){
+
+    var canvas = document.getElementById("input_canvas");
+
+    var context = canvas.getContext('2d');
+
+    context.clearRect (0, 0,  400, 400);
+
+}
