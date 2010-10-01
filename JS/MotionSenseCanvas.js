@@ -3,6 +3,7 @@ if(window.addEventListener)
     {
     window.addEventListener('load', function()
 			    {
+		       			
 
 	    var canvas;
 
@@ -40,6 +41,10 @@ if(window.addEventListener)
 		    {
 		    context.beginPath();
 		    context.moveTo(ev._x, ev._y);
+		    obj = new Object;
+		    obj.x = ev._x;
+		    obj.y = ev._y;
+		    mouse_path.push(obj);
 		    tool.started = true;
 		};
 
@@ -49,7 +54,11 @@ if(window.addEventListener)
 		    if(tool.started)
 			{
 			context.lineTo(ev._x, ev._y);
-			context.stroke();
+			 obj = new Object;
+		         obj.x = ev._x;
+		         obj.y = ev._y;
+		         mouse_path.push(obj);	
+	   		 context.stroke();
 		    }
 		};
 

@@ -1,47 +1,4 @@
-var pattern = new Array();
-
-var answer = new Array(0,1,2,3,4,5,6,7,8);
-
-var count = 0;
-
-function addItem(n){
-    pattern.push(n);
-    addItemToList(n);
-    count = count + 1;
-    if(check()){
-	if(compare()){
-	    window.location = "http://www.espn.com/";
-	}
-    }
-}
-
-function compare(){
-    var status = true;
-    console.log("in method");
-    for(var i = 0; i < 9; i++)
-	{
-	    if(pattern[i]!=answer[i]){
-		console.log("inside if statement");
-		status = false;
-	    }
-	}
-    return status;
-}
-
-function check(){
-    if(count == 9)
-	return true;
-    else
-	return false;
-}
-
-function addItemToList(n){
-    var x = document.getElementById('list_items');
-    var e = document.createElement('li');
-    e.innerHTML = n;
-    x.appendChild(e);
-}
-
+var mouse_path = new Array();
 
 function saveImage(){
 
@@ -51,6 +8,7 @@ function saveImage(){
 
     var img     = canvas.toDataURL("image/png");
 
+    
 
     var x = document.getElementById('saved_images');
     var e = document.createElement('img');
@@ -68,5 +26,27 @@ function clear_canvas(){
     var context = canvas.getContext('2d');
 
     context.clearRect (0, 0,  400, 400);
+
+}
+
+function print_path(){
+ 
+    for(x in mouse_path){
+        console.log("X = " + mouse_path[x].x + " Y = " + mouse_path[x].y);
+    }
+}
+
+function normalize_path(){
+
+    var x_diff = mouse_path[0].x;
+    var y_diff = -1 * mouse_path[0].y;
+
+
+    for(x in mouse_path){
+	mouse_path[x].x = mouse_path[x].x - x_diff;
+	mouse_path[x].y =(-1 *  mouse_path[x].y) - y_diff;
+        console.log("X = " + mouse_path[x].x + " Y = " + mouse_path[x].y);
+    }
+
 
 }
