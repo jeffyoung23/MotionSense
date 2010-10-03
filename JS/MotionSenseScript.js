@@ -1,6 +1,6 @@
 var mouse_path = new Array();
 
-
+var level_one = new Array(0,0,0,0); //cardinal directions
 
 var test_array_1 = new Array();
 
@@ -69,7 +69,7 @@ function normalize_path(){
 
 function compare(){
 
- var level_one = new Array(0,0,0,0); //cardinal directions
+
     for( x in mouse_path){
 	if(mouse_path[x].x == 0 && mouse_path[x].y > 0){ //up y-axis
 	    level_one[0] = level_one[0] + 1;
@@ -88,6 +88,9 @@ function compare(){
     }
     console.log(compare_level_one(level_one));
 }
+
+
+
 
 
 function compare_level_one(x){

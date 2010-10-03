@@ -1,0 +1,5 @@
+jQuery(document).ready(function(){
+	$(document).mousemove(function(e){
+		$('#status').html(e.pageX +', '+ e.pageY);
+	    }); 
+    })
