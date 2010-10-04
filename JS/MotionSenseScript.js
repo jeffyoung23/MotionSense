@@ -61,16 +61,15 @@ function normalize_path(){
     for( x in mouse_path){
 	mouse_path[x].x = (mouse_path[x].x) - x_diff;
 	mouse_path[x].y = (-1 * mouse_path[x].y) - y_diff;
-	console.log("X = " + mouse_path[x].x + " Y = " + mouse_path[x].y);
     }
 
 
 }
 
 function compare(){
-
-
+    var fudge_factor = 0;
     for(x in mouse_path){
+	if(fudge_factor > 30){
 	if(mouse_path[x].x == 0 && mouse_path[x].y == 0){
 	}
         else if(mouse_path[x].x == 0 && mouse_path[x].y > 0){ //up y-axis
@@ -89,22 +88,26 @@ function compare(){
 	}
 	else if(((mouse_path[x-1].x < 0 && mouse_path[x].x > 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x < 0)) && mouse_path[x].y > 0)
 	    {
- level_one[0] = level_one[0] + 1;
+		level_one[0] = level_one[0] + 1;
 	}
       else if(((mouse_path[x-1].y < 0 && mouse_path[x].y > 0)||(mouse_path[x-1].y > 0 && mouse_path[x].y < 0)) && mouse_path[x].x > 0)
 	  {
- level_one[1] = level_one[1] + 1;
+	      level_one[1] = level_one[1] + 1;
 	}
        else if(((mouse_path[x-1].x < 0 && mouse_path[x].x > 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x < 0)) && mouse_path[x].y < 0)
-{
- level_one[2] = level_one[2] + 1;
+	   {
+	       level_one[2] = level_one[2] + 1;
 	}
 	else if(((mouse_path[x-1].y < 0 && mouse_path[x].y > 0)||(mouse_path[x-1].y > 0 && mouse_path[x].y < 0)) && mouse_path[x].x < 0)
-{
- level_one[3] = level_one[3] + 1;
+	    {
+		level_one[3] = level_one[3] + 1;
 	}
+	}
+	fudge_factor = fudge_factor + 1;
     }
+
     console.log(compare_level_one(level_one));
+    console.log(level_one);
 }
 
 
