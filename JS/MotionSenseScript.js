@@ -1,4 +1,3 @@
-
 /*
 Array holding objects of captured mouse coordinates
 */
@@ -49,7 +48,95 @@ function saveImage(){
     e.style.width = "200px";
     e.style.height = "200px";
     x.appendChild(e);
+
+    var string_item = "";
+    store(string_item + localStorage.length, string_item + localStorage.length); 
 }
+
+/*
+Stores items to local storage
+*/
+    function store(key, value){
+		localStorage.setItem(key, value);
+    }
+
+
+/*
+Clear current canvas
+*/
+
+function clear_canvas(){
+
+    var canvas = document.getElementById("input_canvas");
+
+    var context = canvas.getContext('2d');
+
+    context.clearRect (0, 0,  400, 400);
+
+}
+
+/*
+Print the current values in path
+*/
+
+function print_path(){
+ 
+    for(x in mouse_path){
+        console.log("X = " + mouse_path[x].x + " Y = " + mouse_path[x].y);
+    }
+}
+
+/*
+Normalizes path so that the first data point
+is at (0,0) and everything else is oriented 
+around that
+*/
+
+function normalize_path(){
+
+    var x_diff = mouse_path[0].x;
+    var y_diff = -1 * mouse_path[0].y;
+
+    for( x in mouse_path){
+	mouse_path[x].x = (mouse_path[x].x) - x_diff;
+	mouse_path[x].y = (-1 * mouse_path[x].y) - y_diff;
+    }
+
+
+}
+
+/*
+Builds the level one array from the
+current set of data points
+
+The if comparisons look for pairs where either x or y is 0, or the last coordinate has a different
+sign then the current coordinate. Both signal that the path has crossed an axis
+*/
+
+function compare(){
+    //Fudge factor is used to avoid any small variations in mouse movement to begin path
+    var fudge_factor = 0;
+    for(x in mouse_path){
+	if(fudge_factor > 30){
+	if(mouse_path[x].x == 0 && mouse_path[x].y == 0){
+	}
+}
+
+/*
+Stores items to local storage
+*/
+    function store(key, value){
+	if (typeof(localStorage) == ‘undefined’ ) {
+	    alert(‘Your browser does not support HTML5 localStorage. Try upgrading.’);
+	} else {
+	    try {
+		localStorage.setItem(key, value); //saves to the database, “key”, “value”
+	    } catch (e) {
+		if (e == QUOTA_EXCEEDED_ERR) {
+		    alert(‘Quota exceeded!’); //data wasn’t successfully saved due to quota exceed so throw an error
+		}
+	    }
+    }
 
 
 /*
