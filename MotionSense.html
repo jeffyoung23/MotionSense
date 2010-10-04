@@ -7,18 +7,12 @@
 <link rel="stylesheet" type="text/css" href="CSS/MotionSenseStyle.css"> 
 </head>
 <body>
-<div id = "console">
-<div id = "input_console">
-<canvas id="input_canvas" width="400" height="400"></canvas> 
-</div>
-<div id = "right_console">
-<div class="button" id="capture_input" onClick="saveImage()">Capture Input</div>
-<div class="button" id="clear_canvas" onClick="clear_canvas()">Clear Canvas</div>
-<div class="button" id="normalize_path" onClick="normalize_path()">Normalize Path</div>
-<div class="button" id="compare" onClick="compare()">Compare</div>
-<div class="button" id="print_path" onClick="print_path()">Print Path</div>
-<div id="saved_images"></div>
-</div>
-</div>
+<canvas id = "input_canvas" width = "400" height = "400"></canvas> 
+<button type = "button" id = "capture_input" onClick = "saveImage()">Capture Input</button>
+<button type = "button" id = "clear_canvas" onClick = "clear_canvas()">Clear Canvas</button>
+<button type = "button" id = "normalize_path" onClick = "normalize_path()">Normalize Path</button>
+<button type = "button" id = "compare" onClick = "compare()">Compare</button>
+<button type = "button" id = "print_path" onClick = "print_path()">Print Path</button>
+<div id = "saved_images"></div>
 </body>
 </html>
