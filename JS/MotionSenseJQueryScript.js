@@ -13,9 +13,10 @@ jQuery(document).ready(function(){
 		if(status)
 		    {
                         context.lineTo(e.pageX, e.pageY);
-			obj = new Object;
-			obj.x = e.pageX;
-			obj.y = e.pageY;
+			obj = {
+			x : e.pageX,
+			y : e.pageY
+			};
 			mouse_path.push(obj);
 			context.stroke();
                     }
@@ -24,9 +25,10 @@ jQuery(document).ready(function(){
 	$(document).mousedown(function(e){
 		context.beginPath();
 		context.moveTo(e.pageX, e.pageY);
-		obj = new Object;
-		obj.x = e.pageX;
-		obj.y = e.pageY;
+		obj = {
+			x : e.pageX,
+			y : e.pageY
+			};
 		mouse_path.push(obj);
 		status = true;
 	    }); 
@@ -41,4 +43,4 @@ jQuery(document).ready(function(){
 
 
 
-    })
+    });
