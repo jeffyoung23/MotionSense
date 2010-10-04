@@ -1,6 +1,18 @@
+
+/*
+Array holding objects of captured mouse coordinates
+*/
 var mouse_path = new Array();
 
+/*
+Level one array for current set of data
+*/
+
 var level_one = new Array(0,0,0,0); //cardinal directions
+
+/*
+Test level one arrays to compare to
+*/
 
 var test_array_1 = new Array();
 
@@ -16,6 +28,11 @@ test_array_2[1] = 0;
 test_array_2[2] = 0;
 test_array_2[3] = 1;
 
+/*
+Saves the drawn mouse path in the canvas as a .png
+Then creates an element for the image and
+adds it to the html
+*/
 
 function saveImage(){
 
@@ -25,8 +42,6 @@ function saveImage(){
 
     var img     = canvas.toDataURL("image/png");
 
-    
-
     var x = document.getElementById('saved_images');
     var e = document.createElement('img');
     e.src = img;
@@ -35,6 +50,11 @@ function saveImage(){
     e.style.height = "200px";
     x.appendChild(e);
 }
+
+
+/*
+Clear current canvas
+*/
 
 function clear_canvas(){
 
@@ -46,12 +66,22 @@ function clear_canvas(){
 
 }
 
+/*
+Print the current values in path
+*/
+
 function print_path(){
  
     for(x in mouse_path){
         console.log("X = " + mouse_path[x].x + " Y = " + mouse_path[x].y);
     }
 }
+
+/*
+Normalizes path so that the first data point
+is at (0,0) and everything else is oriented 
+around that
+*/
 
 function normalize_path(){
 
@@ -66,53 +96,51 @@ function normalize_path(){
 
 }
 
+/*
+Builds the level one array from the
+current set of data points
+
+The if comparisons look for pairs where either x or y is 0, or the last coordinate has a different
+sign then the current coordinate. Both signal that the path has crossed an axis
+*/
+
 function compare(){
+    //Fudge factor is used to avoid any small variations in mouse movement to begin path
     var fudge_factor = 0;
     for(x in mouse_path){
 	if(fudge_factor > 30){
 	if(mouse_path[x].x == 0 && mouse_path[x].y == 0){
 	}
-        else if(mouse_path[x].x == 0 && mouse_path[x].y > 0){ //up y-axis
-	    level_one[0] = level_one[0] + 1;
-	}    
-	else if(mouse_path[x].x > 0 && mouse_path[x].y == 0){ // out x-axis to right
-	    level_one[1] = level_one[1] + 1;
-	}    
-
-	else if(mouse_path[x].x == 0 && mouse_path[x].y < 0){ // down y-axis
-	    level_one[2] = level_one[2] + 1;
-	}    
-
-	else if(mouse_path[x].x < 0 && mouse_path[x].y == 0){ //out x-axis to left
-	    level_one[3] = level_one[3] + 1;
-	}
-	else if(((mouse_path[x-1].x < 0 && mouse_path[x].x > 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x < 0)) && mouse_path[x].y > 0)
+	else if(((mouse_path[x-1].x < 0 && mouse_path[x].x >= 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x <= 0)) && mouse_path[x].y > 0)
 	    {
 		level_one[0] = level_one[0] + 1;
 	}
-      else if(((mouse_path[x-1].y < 0 && mouse_path[x].y > 0)||(mouse_path[x-1].y > 0 && mouse_path[x].y < 0)) && mouse_path[x].x > 0)
+      else if(((mouse_path[x-1].y < 0 && mouse_path[x].y >= 0)||(mouse_path[x-1].y > 0 && mouse_path[x].y <= 0)) && mouse_path[x].x > 0)
 	  {
 	      level_one[1] = level_one[1] + 1;
 	}
-       else if(((mouse_path[x-1].x < 0 && mouse_path[x].x > 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x < 0)) && mouse_path[x].y < 0)
+       else if(((mouse_path[x-1].x < 0 && mouse_path[x].x >= 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x <= 0)) && mouse_path[x].y < 0)
 	   {
 	       level_one[2] = level_one[2] + 1;
 	}
-	else if(((mouse_path[x-1].y < 0 && mouse_path[x].y > 0)||(mouse_path[x-1].y > 0 && mouse_path[x].y < 0)) && mouse_path[x].x < 0)
+	else if(((mouse_path[x-1].y < 0 && mouse_path[x].y >= 0)||(mouse_path[x-1].y > 0 && mouse_path[x].y <= 0)) && mouse_path[x].x < 0)
 	    {
 		level_one[3] = level_one[3] + 1;
 	}
 	}
 	fudge_factor = fudge_factor + 1;
     }
-
+    //Call compare_level_one on the newly built level one array
     console.log(compare_level_one(level_one));
     console.log(level_one);
 }
 
 
 
-
+/*
+Compares level_one array
+to the two test arrays
+*/
 
 function compare_level_one(x){
 

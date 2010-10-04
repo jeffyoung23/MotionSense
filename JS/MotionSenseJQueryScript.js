@@ -9,6 +9,21 @@ jQuery(document).ready(function(){
 	context = canvas.getContext('2d');
 
 
+
+		$(document).mouseup(function(e){
+		if (status)
+		    {
+                        status = false;
+                    }
+	    });
+
+
+			$(document).mousedown(function(e){
+		context.beginPath();
+		context.moveTo(e.pageX, e.pageY);
+		status = true;
+	    });
+
 	$(document).mousemove(function(e){
 		if(status)
 		    {
@@ -20,27 +35,6 @@ jQuery(document).ready(function(){
 			mouse_path.push(obj);
 			context.stroke();
                     }
-	    }); 
-
-	$(document).mousedown(function(e){
-		context.beginPath();
-		context.moveTo(e.pageX, e.pageY);
-		obj = {
-			x : e.pageX,
-			y : e.pageY
-			};
-		mouse_path.push(obj);
-		status = true;
-	    }); 
-
-	$(document).mouseup(function(e){
-		if (status)
-		    {
-                        status = false;
-                    }
 	    });
-
-
-
 
     });
