@@ -45,21 +45,6 @@ function saveImage(){
     store(string_item + localStorage.length, string_Array()); 
 }
 
-
-function clear_storage(){
-    localStorage.clear();
-}
-
-function store(key, item){
-    if(localStorage.length == 0){
-	localStorage.setItem("count", "0");
-    }
-    var x = parseInt(localStorage.getItem("count")) + 1;
-    localStorage.setItem("count","" + x);
-    localStorage.setItem("" +localStorage.getItem("count"), item);
-
-}
-
 /*
 Clear current canvas
 */
@@ -73,10 +58,10 @@ function clear_canvas(){
     context.clearRect (0, 0,  400, 400);
 
    
- level_one[0] = 0;
- level_one[1] = 0;
- level_one[2] = 0;
- level_one[3] = 0;
+    level_one[0] = 0;
+    level_one[1] = 0;
+    level_one[2] = 0;
+    level_one[3] = 0;
  
  mouse_path = [];
 }
