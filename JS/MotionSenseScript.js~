@@ -269,8 +269,8 @@ Print the current values in path
 
 function print_path(){
  
-    for(coordinate in mouse_path){
-        console.log("X = " + mouse_path[coordinate].x + " Y = " + mouse_path[coordinate].y);
+    for(x in mouse_path){
+        console.log("X = " + mouse_path[x].x + " Y = " + mouse_path[x].y);
     }
 }
 
