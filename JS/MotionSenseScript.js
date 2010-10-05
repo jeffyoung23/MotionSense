@@ -41,7 +41,7 @@ function saveImage(){
 
     var string_item = "";
     normalize_path();
-    compare();
+    build_level_one();
     store(string_item + localStorage.length, string_Array()); 
 }
 
@@ -104,11 +104,11 @@ The if comparisons look for pairs where either x or y is 0, or the last coordina
 sign then the current coordinate. Both signal that the path has crossed an axis
 */
 
-function compare(){
+function build_level_one(){
     //Fudge factor is used to avoid any small variations in mouse movement to begin path
     var fudge_factor = 0;
     for(x in mouse_path){
-	if(fudge_factor > 30){
+	if(fudge_factor > 10){
 	if(mouse_path[x].x == 0 && mouse_path[x].y == 0){
 	}
 	else if(((mouse_path[x-1].x < 0 && mouse_path[x].x >= 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x <= 0)) && mouse_path[x].y > 0)
@@ -142,20 +142,17 @@ Compares level_one array
 to the two test arrays
 */
 
-function compare_level_one(x){
-
-    var one = true;
-    var two = true;
+function compare_level_one(key){
+ 
+    var com_array = getLevelOne(key);
 
     for(var i = 0; i < 4; i++){
-	if(x[i] != test_array_1[i]){
+	if(level_one[i] != com_array[i]){
 	   
-	    one = false;
-	} 
-	if(x[i] != test_array_2[i]){
-	    two = false;
+	    return false;
 	} 
     }
+    return true;
 }
 
 function string_Array(){
