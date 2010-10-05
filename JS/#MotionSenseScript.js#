@@ -73,10 +73,10 @@ function clear_canvas(){
     context.clearRect (0, 0,  400, 400);
 
    
- level_one[0] = 0;
- level_one[1] = 0;
- level_one[2] = 0;
- level_one[3] = 0;
+    level_one[0] = 0;
+    level_one[1] = 0;
+    level_one[2] = 0;
+    level_one[3] = 0;
  
  mouse_path = [];
 }
