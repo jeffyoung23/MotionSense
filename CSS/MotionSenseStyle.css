@@ -21,19 +21,35 @@ border: 1px solid black;
 }
 
 #controls{
-width: 600px;
+width: 500px;
 }
 
 #saved_images{
 left:600px;
 position:absolute;
 top:0;
-width:660px;
+width:720px;
+}
+
+#image_wrapper{
+ -moz-box-shadow: 0 0 1em black;
+-webkit-box-shadow: 0 0 1em black;
+        box-shadow: 0 0 1em black;
+	width: 220px;
+	margin: 10px;
+	float: left;
 }
 
 #save_image{
-  -moz-box-shadow: 0 0 1em black;
--webkit-box-shadow: 0 0 1em black;
-        box-shadow: 0 0 1em black;
+	height: 200px;
+	width: 200px;
+	margin: 10px;
+	border: 1px solid grey;
 }
 
+#caption_image{
+margin-left: 10px;
+margin-right: 10px;
+margin-top: -10px;
+align: left;
+}

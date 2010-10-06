@@ -23,7 +23,7 @@ Then creates an element for the image and
 adds it to the html
 */
 
-function saveImage(){
+function capture_Gesture(){
 
     var canvas = document.getElementById("input_canvas");
 
@@ -32,20 +32,34 @@ function saveImage(){
     var img     = canvas.toDataURL("image/png");
 
     var x = document.getElementById('saved_images');
-    var e = document.createElement('img');
-    e.src = img;
-    e.id = "save_image";
-    e.style.width = "200px";
-    e.style.height = "200px";
-    e.style.margin = "10px";
-    x.appendChild(e);
+   
+     var web = document.getElementById("event_website").value;
+    var name  = document.getElementById("event_name").value;
+    
+
+ var image = document.createElement('img');
+ var wrapper = document.createElement('div');
+  var caption = document.createElement('div');
+  
+  wrapper.id = "image_wrapper";
+  image.id = "save_image";
+  caption.id = "caption_image";
+
+  caption.innerHTML = name + " - " + web;
+  
+    image.src = img;
+    image.id = "save_image";
+
+    wrapper.appendChild(image);
+    wrapper.appendChild(caption);
+
+    x.appendChild(wrapper);
 
     normalize_path();
     build_level_one();
 
-    var web = document.getElementById("event_website");
-    var name  = document.getElementById("event_name");   
-    store(string_Array(),web.value, name.value); 
+      
+    store(string_Array(),web, name); 
 }
 
 /*
