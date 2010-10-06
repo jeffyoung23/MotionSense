@@ -10,13 +10,18 @@ function clear_storage(){
 
 
 //Store an item
-function store(key, item){
+function store(array, web, name){
     if(localStorage.length == 0){
         localStorage.setItem("count", "0");
     }
     var x = parseInt(localStorage.getItem("count")) + 1;
     localStorage.setItem("count","" + x);
-    localStorage.setItem("" +localStorage.getItem("count"), item);
+    
+    //the key of each element is the gestures id, or number, and
+    //an identifier to identify what info the value is
+    localStorage.setItem("" +localStorage.getItem("count") + "a", array);
+    localStorage.setItem("" +localStorage.getItem("count") + "w", web);
+    localStorage.setItem("" +localStorage.getItem("count") + "n", name);
 }
 
 //return a level one array

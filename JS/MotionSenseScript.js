@@ -37,12 +37,15 @@ function saveImage(){
     e.id = "save_image";
     e.style.width = "200px";
     e.style.height = "200px";
+    e.style.margin = "10px";
     x.appendChild(e);
 
-    var string_item = "";
     normalize_path();
     build_level_one();
-    store(string_item + localStorage.length, string_Array()); 
+
+    var web = document.getElementById("event_website");
+    var name  = document.getElementById("event_name");   
+    store(string_Array(),web.value, name.value); 
 }
 
 /*
