@@ -1,4 +1,4 @@
-/*
+/**
 All Motion Sense js code relating to local storage
 */
 

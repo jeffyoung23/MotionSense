@@ -1,15 +1,15 @@
-/*
+/**
 Array holding objects of captured mouse coordinates
 */
 var mouse_path = [];
-/*
+/**
 Level one array for current set of data
 */
 
 var level_one = [0,0,0,0]; //cardinal directions
 
 localStorage.clear();
-/*
+/**
 Test level one arrays to compare to
 */
 
@@ -17,7 +17,7 @@ var test_array_1 = [0,2,0,0];
 
 var test_array_2 = [1,0,0,1];
 
-/*
+/**
 Saves the drawn mouse path in the canvas as a .png
 Then creates an element for the image and
 adds it to the html
@@ -62,7 +62,7 @@ function capture_Gesture(){
     store(string_Array(),web, name); 
 }
 
-/*
+/**
 Clear current canvas
 */
 
@@ -83,7 +83,7 @@ function clear_canvas(){
  mouse_path = [];
 }
 
-/*
+/**
 Print the current values in path
 */
 
@@ -94,7 +94,7 @@ function print_path(){
     }
 }
 
-/*
+/**
 Normalizes path so that the first data point
 is at (0,0) and everything else is oriented 
 around that
@@ -113,7 +113,7 @@ function normalize_path(){
 
 }
 
-/*
+/**
 Builds the level one array from the
 current set of data points
 
@@ -154,7 +154,7 @@ function build_level_one(){
 
 
 
-/*
+/**
 Compares level_one array
 to the two test arrays
 */
