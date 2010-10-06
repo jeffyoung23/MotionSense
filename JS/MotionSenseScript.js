@@ -122,10 +122,9 @@ sign then the current coordinate. Both signal that the path has crossed an axis
 */
 
 function build_level_one(){
-    //Fudge factor is used to avoid any small variations in mouse movement to begin path
-    var fudge_factor = 0;
+    var fudge = 0;
     for(x in mouse_path){
-	if(fudge_factor > 10){
+	if(fudge > 5){
 	if(mouse_path[x].x == 0 && mouse_path[x].y == 0){
 	}
 	else if(((mouse_path[x-1].x < 0 && mouse_path[x].x >= 0)||(mouse_path[x-1].x > 0 && mouse_path[x].x <= 0)) && mouse_path[x].y > 0)
@@ -145,7 +144,7 @@ function build_level_one(){
 		level_one[3] = level_one[3] + 1;
 	}
 	}
-	fudge_factor = fudge_factor + 1;
+	fudge = fudge + 1;
     }
     //Call compare_level_one on the newly built level one array
     //   console.log(compare_level_one(level_one));

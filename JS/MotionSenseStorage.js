@@ -43,11 +43,11 @@ function test_array(level_one, x){
 }
 
 function queryGesture(){
-    var key_num = 101;
+    
     normalize_path();
     build_level_one();
     var status = true;
-    var saved_gestures = [];
+   
     var num_db = localStorage.length;
 
     for(var i = 0; i < num_db-1; i++){
@@ -61,7 +61,8 @@ function queryGesture(){
 	if(key_array[1] == 'a'){
 	    console.log("first if");
 	    var item_x = localStorage.getItem(key_x);
-	    var item_array = key_x.split(",");
+	    var item_array = item_x.split(",");
+	    console.log(item_array);
 		for(var j = 0; j < 4; j++){
 		    console.log("second for");		   
 		    if(item_array[j] != level_one[j]){
@@ -72,11 +73,12 @@ function queryGesture(){
 		
 	    if(status){
 		    console.log("final if");
-		    key_num =  key_x;
+		    return key_x;
 		}
-	    }
-	status = true;    
+	   	    
+}
+	status = true; 
 }
 
-    return key_num;
+    return "no match";
 }
