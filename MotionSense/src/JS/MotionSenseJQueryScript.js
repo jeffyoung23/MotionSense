@@ -33,7 +33,7 @@ jQuery(document).ready(function(){
 			y : e.pageY
 			};
 			mouse_path.push(obj);*/
-		socket.send('X = ' + e.pageX + ' Y = ' + e.pageY);
+		socket.send(e.pageX + 'X = ' + e.pageX + ' Y = ' + e.pageY);
 			context.stroke();
                     }
 	    });
