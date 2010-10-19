@@ -1,9 +1,0 @@
-Motion Sense Goals
-
-10/6/10: Find some way to store images of gestures
-	 A gesture should have
-	   >  a pattern(level one, level two, etc)
-	   >  an image, so the user knows what to replicate
-	   >  an event, trigger some script, redirect, etc
-
-	 
