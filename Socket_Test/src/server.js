@@ -32,6 +32,6 @@ server.listen(8080);
 var socket = io.listen(server);
 
 socket.on('connection', function(client){
-  client.on('message', function(data){socket.broadcast(data)});
+  client.on('message', function(data){console.log(data);});
   client.on('disconnect', function(){socket.broadcast('byyyyy');})
 });

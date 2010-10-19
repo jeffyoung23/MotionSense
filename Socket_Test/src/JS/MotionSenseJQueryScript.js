@@ -28,11 +28,12 @@ jQuery(document).ready(function(){
 		if(status)
 		    {
                         context.lineTo(e.pageX, e.pageY);
-			obj = {
+		/**	obj = {
 			x : e.pageX,
 			y : e.pageY
 			};
-			mouse_path.push(obj);
+			mouse_path.push(obj);*/
+		socket.send('X = ' + e.pageX + ' Y = ' + e.pageY);
 			context.stroke();
                     }
 	    });
