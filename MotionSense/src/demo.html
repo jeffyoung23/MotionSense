@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+	<head>
+	 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script src="client/socket.io.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		var socket = new io.Socket(null, {rememberTransport: false, port: 8080});
+		socket.connect();
+		socket.on('message', function(data) {
+console.log('mommma');
+			$('body').append('<p>' + 
+			data + '</p>');
+		});
+	</script> 
+	</head>
+	<body>
+		
+	</body>
+</html>
