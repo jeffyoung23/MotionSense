@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Socket Test</title>
+  <meta name="description" content="Web Socket Testing">
+  <meta name="author" content="KeysOfTheRaw">
+<script>
+var socket = new io.Socket(localhost, {port: 8080});
+      socket.connect();
+      socket.on('message', function(){console.log('woot')});
+
+</script>
+</head>
+<body>
+</body>
+</html>
