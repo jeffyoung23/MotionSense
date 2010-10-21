@@ -5,6 +5,10 @@ fs = require('fs'),
 io = require('../lib/socket.io'),
 sys = require('sys');
 
+require.paths.unshift('../../../mongoose');
+var mongoose = require('mongoose').Mongoose;
+
+
 server = http.createServer(function(request, response){
 	var uri = url.parse(request.url).pathname;
 	var filename = path.join(process.cwd(), uri);
