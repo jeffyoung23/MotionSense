@@ -1,8 +1,7 @@
-var Client = require('../client'),
-    url = require('url'),
-    Buffer = require('buffer').Buffer,
-    crypto = require('crypto'),
-    net = require('net'),
+var Client = require('../client')
+  , Stream = require('net').Stream
+  , url = require('url')
+  , crypto = require('crypto');
 
 WebSocket = module.exports = function(){
   Client.apply(this, arguments);
@@ -11,38 +10,25 @@ WebSocket = module.exports = function(){
 require('sys').inherits(WebSocket, Client);
 
 WebSocket.prototype._onConnect = function(req, socket){
-  var self = this, headers = [];
-  this.request = req;
-  this.connection = socket;
+  var self = this
+    , headers = [];
+  
+  Client.prototype._onConnect.call(this, req);
+    
   this.data = '';
   
-  if (!(this.connection instanceof net.Stream)){
-    this.listener.options.log('WebSocket connection invalid');
-    this.connection.writeHead(500);
-    this.connection.write('Invalid');
-    this.connection.end();
-    return false;
-  }
-
   if (this.request.headers.upgrade !== 'WebSocket' || !this._verifyOrigin(this.request.headers.origin)){
     this.listener.options.log('WebSocket connection invalid or Origin not verified');
+    this.connection.end();
     this.connection.destroy();
     return false;
-  }
-
-  this.connection.setTimeout(0);
-  this.connection.setEncoding('utf8');
-  this.connection.setNoDelay(true);
-
-  if ('sec-websocket-key1' in this.request.headers){
-    this.draft = 76;
   }
   
   var origin = this.request.headers.origin,
       location = (origin && origin.substr(0, 5) == 'https' ? 'wss' : 'ws')
                + '://' + this.request.headers.host + this.request.url;
     
-  if (this.draft == 76){
+  if ('sec-websocket-key1' in this.request.headers){
     headers = [
       'HTTP/1.1 101 WebSocket Protocol Handshake',
       'Upgrade: WebSocket',
@@ -63,26 +49,20 @@ WebSocket.prototype._onConnect = function(req, socket){
       'WebSocket-Location: ' + location
     ];
     
+    this.connection.setTimeout(0);
+    this.connection.setNoDelay(true);
+    this.connection.setEncoding('utf-8');
+    
     try {
       this.connection.write(headers.concat('', '').join('\r\n'));
     } catch(e){
-      this._onClose();
+      this.connection.end();
+      this.connection.destroy();
     }
   }
   
-  this.connection.addListener('end', function(){
-    self._onClose();
-  });
-  
   this.connection.addListener('data', function(data){
     self._handle(data);
-  });
-
-  req.addListener('error', function(err){
-    req.end && req.end() || req.destroy && req.destroy();
-  });
-  socket.addListener('error', function(data){
-    socket && (socket.end && socket.end() || socket.destroy && socket.destroy());
   });
 
   if (this._proveReception(headers)) this._payload();
@@ -97,7 +77,12 @@ WebSocket.prototype._handle = function(data){
     chunk = chunks[i];
     if (chunk[0] !== '\u0000'){
       this.listener.options.log('Data incorrectly framed by UA. Dropping connection');
-      this.connection.end();
+      if (this._open){
+        this._onClose();
+      } else {
+        this.connection.end();
+        this.connection.destroy();
+      }
       return false;
     }
     this._onMessage(chunk.slice(1));
@@ -107,8 +92,9 @@ WebSocket.prototype._handle = function(data){
 
 // http://www.whatwg.org/specs/web-apps/current-work/complete/network.html#opening-handshake
 WebSocket.prototype._proveReception = function(headers){
-  var k1 = this.request.headers['sec-websocket-key1'],
-      k2 = this.request.headers['sec-websocket-key2'];
+  var self = this
+    , k1 = this.request.headers['sec-websocket-key1']
+    , k2 = this.request.headers['sec-websocket-key2'];
   
   if (k1 && k2){
     var md5 = crypto.createHash('md5');
@@ -118,11 +104,9 @@ WebSocket.prototype._proveReception = function(headers){
           spaces = k.replace(/[^ ]/g, '').length;
           
       if (spaces === 0 || n % spaces !== 0){
-		if(this.listener && this.listener.options){
-           this.listener.options.log('Invalid WebSocket key: "' + k + '". Dropping connection');
-		}
-        this.connection.writeHead(500);
-        this.connection.end();
+        self.listener.options.log('Invalid WebSocket key: "' + k + '". Dropping connection');
+        self.connection.end();
+        self.connection.destroy();
         return false;
       }
 
@@ -140,7 +124,8 @@ WebSocket.prototype._proveReception = function(headers){
     try {
       this.connection.write(headers.concat('', '').join('\r\n') + md5.digest('binary'), 'binary');
     } catch(e){
-      this._onClose();
+      this.connection.end();
+      this.connection.destroy();
     }
   }
   

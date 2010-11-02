@@ -1,7 +1,7 @@
-var Client = require('../client'),
-    qs = require('querystring'),
+var Client = require('../client')
+  , qs = require('querystring');
 
-HTMLFile = module.exports = function(){
+var HTMLFile = module.exports = function(){
   Client.apply(this, arguments);
 };
 
@@ -11,8 +11,7 @@ HTMLFile.prototype._onConnect = function(req, res){
   var self = this, body = '';
   switch (req.method){
     case 'GET':
-      Client.prototype._onConnect.apply(this, [req, res]);
-      this.request.connection.addListener('close', function(){ self._onClose(); });
+      Client.prototype._onConnect.call(this, req, res);
       this.response.useChunkedEncodingByDefault = true;
       this.response.shouldKeepAlive = true;
       this.response.writeHead(200, {
@@ -20,8 +19,7 @@ HTMLFile.prototype._onConnect = function(req, res){
         'Connection': 'keep-alive',
         'Transfer-Encoding': 'chunked'
       });
-      this.response.write('<html><body>' + new Array(244).join(' '));
-      if ('flush' in this.response) this.response.flush();
+      this.response.write('<html><body>' + new Array(245).join(' '));
       this._payload();
       break;
       
@@ -43,6 +41,6 @@ HTMLFile.prototype._onConnect = function(req, res){
 };
   
 HTMLFile.prototype._write = function(message){
-  this.response.write('<script>parent.s._('+ JSON.stringify(message) +', document);</script>'); //json for escaping
-  if ('flush' in this.response) this.response.flush();
+  if (this._open)
+    this.response.write('<script>parent.s._('+ JSON.stringify(message) +', document);</script>'); //json for escaping
 };

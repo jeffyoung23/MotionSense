@@ -1,16 +1,19 @@
-var urlparse = require('url').parse,
-    options = require('./utils').options,
-    encode = require('./utils').encode,
-    decode = require('./utils').decode,
+var urlparse = require('url').parse
+  , OutgoingMessage = require('http').OutgoingMessage
+  , Stream = require('net').Stream
+  , options = require('./utils').options
+  , encode = require('./utils').encode
+  , decode = require('./utils').decode
+  , merge = require('./utils').merge;
 
-Client = module.exports = function(listener, req, res, options, head){
+var Client = module.exports = function(listener, req, res, options, head){
   process.EventEmitter.call(this);
   this.listener = listener;
-  this.options({
+  this.options(merge({
     timeout: 8000,
     heartbeatInterval: 10000,
     closeTimeout: 0
-  }, options);
+  }, this.getOptions ? this.getOptions() : {}), options);
   this.connections = 0;
   this._open = false;
   this._heartbeats = 0;
@@ -54,22 +57,32 @@ Client.prototype._onMessage = function(data){
 
 Client.prototype._onConnect = function(req, res){
   var self = this;
+  
   this.request = req;
   this.response = res;
-  this.connection = this.request.connection;
+  this.connection = req.connection;
   
-  // error handling
-  req.addListener('error',function(err){
-    req.end && req.end() || req.destroy && req.destroy();
-  });
-  res.addListener('error', function(err){
-    res.end && res.end() || res.destroy && res.destroy();
-  });
-  req.connection.addListener('error', function(err){
-    req.socket && ( req.socket.end && req.socket.end() || req.socket.destroy && req.socket.destroy() );
+  this.connection.addListener('end', function(){
+    if (self.connection){
+      self.connection.end();
+      self.connection.destroy();
+    }
+    self._onClose();
   });
   
-  if (this._disconnectTimeout) clearTimeout(this._disconnectTimeout);
+  if (req){
+    req.addListener('error', function(err){
+      req.end && req.end() || req.destroy && req.destroy();
+    });
+    if (res) res.addListener('error', function(err){
+      res.end && res.end() || res.destroy && res.destroy();
+    });
+    req.connection.addListener('error', function(err){
+      req.connection.end && req.connection.end() || req.connection.destroy && req.connection.destroy();
+    });
+    
+    if (this._disconnectTimeout) clearTimeout(this._disconnectTimeout);
+  }
 };
 
 Client.prototype._payload = function(){
@@ -87,7 +100,7 @@ Client.prototype._payload = function(){
   
   payload = payload.concat(this._writeQueue || []);
   this._writeQueue = [];
-  
+
   if (payload.length) this._write(encode(payload));
   if (this.connections === 1) this.listener._onClientConnect(this);
   
@@ -111,26 +124,37 @@ Client.prototype._onHeartbeat = function(h){
   }
 };
 
-Client.prototype._onClose = function(){
+Client.prototype._onClose = function(skipDisconnect){
   if (this._open){
     var self = this;
     if ('_heartbeatInterval' in this) clearTimeout(this._heartbeatInterval);
     if ('_heartbeatTimeout' in this) clearTimeout(this._heartbeatTimeout);
     this._open = false;
-    this._disconnectTimeout = setTimeout(function(){
-      self._onDisconnect();
-    }, this.options.closeTimeout);
+    if (skipDisconnect !== false){
+      if (this.handshaked)
+        this._disconnectTimeout = setTimeout(function(){
+          self._onDisconnect();
+        }, this.options.closeTimeout);
+      else
+        this._onDisconnect();
+    }
   }
 };
 
 Client.prototype._onDisconnect = function(){
+  if (this._open) this._onClose(true);
+  if (this._disconnectTimeout) clearTimeout(this._disconnectTimeout);
   if (this.connected){
     this._writeQueue = [];
     this._open = false;
     this.connected = false;
     this.request = null;
     this.response = null;
-    this.connection = null;
+    if (this.connection){
+      this.connection.end();
+      this.connection.destroy();
+      this.connection = null;
+    }
     if (this.handshaked){
       this.emit('disconnect');
       this.listener._onClientDisconnect(this);
@@ -139,9 +163,7 @@ Client.prototype._onDisconnect = function(){
 };
 
 Client.prototype._queue = function(message){
-  if (!('_writeQueue' in this)){
-    this._writeQueue = [];
-  }
+  this._writeQueue = this._writeQueue || [];
   this._writeQueue.push(message);
   return this;
 };

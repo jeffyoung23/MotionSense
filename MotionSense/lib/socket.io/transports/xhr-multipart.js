@@ -1,7 +1,7 @@
-var Client = require('../client'), 
-    qs = require('querystring'),
+var Client = require('../client')
+  , qs = require('querystring');
 
-Multipart = module.exports = function(){
+var Multipart = module.exports = function(){
   Client.apply(this, arguments);
 };
 
@@ -56,8 +56,9 @@ Multipart.prototype._onConnect = function(req, res){
 };
   
 Multipart.prototype._write = function(message){
-  this.response.write("Content-Type: text/plain" + (message.length === 1 && message.charCodeAt(0) === 6 ? "; charset=us-ascii" : "") + "\n\n");
-  this.response.write(message + "\n");
-  this.response.write("--socketio\n");
-  if ('flush' in this.response) this.response.flush();
+  if (this._open){
+    this.response.write("Content-Type: text/plain" + (message.length === 1 && message.charCodeAt(0) === 6 ? "; charset=us-ascii" : "") + "\n\n");
+    this.response.write(message + "\n");
+    this.response.write("--socketio\n");
+  }
 };

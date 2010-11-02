@@ -1,19 +1,19 @@
-var url = require('url'),
-    sys = require('sys'),
-    fs = require('fs'),
-    options = require('./utils').options,
-    Client = require('./client'),
-    clientVersion = require('./../../support/socket.io-client/lib/io').io.version,
-    transports = {
-      'flashsocket': require('./transports/flashsocket'),
-      'htmlfile': require('./transports/htmlfile'),
-      'websocket': require('./transports/websocket'),
-      'xhr-multipart': require('./transports/xhr-multipart'),
-      'xhr-polling': require('./transports/xhr-polling'),
-      'jsonp-polling': require('./transports/jsonp-polling')
-    },
+var url = require('url')
+  , sys = require('sys')
+  , fs = require('fs')
+  , options = require('./utils').options
+  , Client = require('./client')
+  , clientVersion = require('./../../support/socket.io-client/lib/io').io.version
+  , transports = {
+      'flashsocket': require('./transports/flashsocket')
+    , 'htmlfile': require('./transports/htmlfile')
+    , 'websocket': require('./transports/websocket')
+    , 'xhr-multipart': require('./transports/xhr-multipart')
+    , 'xhr-polling': require('./transports/xhr-polling')
+    , 'jsonp-polling': require('./transports/jsonp-polling')
+    };
 
-Listener = module.exports = function(server, options){
+var Listener = module.exports = function(server, options){
   process.EventEmitter.call(this);
   var self = this;
   this.server = server;
@@ -21,22 +21,11 @@ Listener = module.exports = function(server, options){
     origins: '*:*',
     resource: 'socket.io',
     transports: ['websocket', 'flashsocket', 'htmlfile', 'xhr-multipart', 'xhr-polling', 'jsonp-polling'],
-    transportOptions: {
-      'xhr-polling': {
-        timeout: null, // no heartbeats
-        closeTimeout: 8000,
-        duration: 20000
-      },
-      'jsonp-polling': {
-        timeout: null, // no heartbeats
-        closeTimeout: 8000,
-        duration: 20000
-      }
-    },
-    log: function(message){
-      sys.log(message);
-    }
+    transportOptions: {},
+    log: sys.log
   }, options);
+  
+  if (!this.options.log) this.options.log = function(){};
 
   this.clients = this.clientsIndex = {};
   this._clientFiles = {};
@@ -52,27 +41,14 @@ Listener = module.exports = function(server, options){
   });
   
   this.server.addListener('upgrade', function(req, socket, head){
-	req.addListener("error",function(err){ 
-	  console.log("Socket.io::upgrade req error: " + JSON.stringify(err));
-	  req.end && req.end() || req.destroy && req.destroy();
-	}); 
-	socket.addListener("error",function(err){
-	  console.log("Socket.io::upgrade socket error: " + JSON.stringify(err));
-	  socket.end && socket.end() || socket.destroy && socket.destroy();
-	});
-	req.socket.addListener("error",function(err){
-	  console.log("Socket.io::upgrade req.socket error: " + JSON.stringify(err));
-	  req.socket && ( req.socket.end && req.socket.end() || req.socket.destroy && req.socket.destroy() );
-	});
-	
     if (!self.check(req, socket, true, head)){
+      socket.end();
       socket.destroy();
     }
   });
   
-  for (var i in transports){
+  for (var i in transports)
     if ('init' in transports[i]) transports[i].init(this);
-  }
   
   this.options.log('socket.io ready - accepting connections');
 };
@@ -101,6 +77,7 @@ Listener.prototype.check = function(req, res, httpUpgrade, head){
         cn._onConnect(req, res);
       } else {
         req.connection.end();
+        req.connection.destroy();
         this.options.log('Couldnt find client with session id "' + parts[2] + '"');
       }
     } else {
@@ -111,9 +88,14 @@ Listener.prototype.check = function(req, res, httpUpgrade, head){
   return false;
 };
 
-Listener.prototype._serveClient = function(path, req, res){
-  var self = this,
-      types = {
+Listener.prototype._serveClient = function(file, req, res){
+  var self = this
+    , clientPaths = {
+        'socket.io.js': 'socket.io.js',
+        'lib/vendor/web-socket-js/WebSocketMain.swf': 'lib/vendor/web-socket-js/WebSocketMain.swf', // for compat with old clients
+        'WebSocketMain.swf': 'lib/vendor/web-socket-js/WebSocketMain.swf'
+      }
+    , types = {
         swf: 'application/x-shockwave-flash',
         js: 'text/javascript'
       };
@@ -124,28 +106,24 @@ Listener.prototype._serveClient = function(path, req, res){
       res.end();
     } else {
       res.writeHead(200, self._clientFiles[path].headers);
-      res.write(self._clientFiles[path].content, self._clientFiles[path].encoding);
-      res.end();
+      res.end(self._clientFiles[path].content, self._clientFiles[path].encoding);
     }
   };
   
-  function error(){
-    res.writeHead(404);
-    res.write('404');
-    res.end();
-  };
-  if (req.method == 'GET' && path == 'socket.io.js' || path.indexOf('lib/vendor/web-socket-js/') === 0){
+  var path = clientPaths[file];
+  
+  if (req.method == 'GET' && path !== undefined){
     if (path in this._clientFiles){
       write(path);
+      return true;
     }
+    
     fs.readFile(__dirname + '/../../support/socket.io-client/' + path, function(err, data){
       if (err){
-        return error();
+        res.writeHead(404);
+        res.end('404');
       } else {
         var ext = path.split('.').pop();
-        if (!(ext in types)){
-          return error();
-        }
         self._clientFiles[path] = {
           headers: {
             'Content-Length': data.length,
@@ -158,6 +136,7 @@ Listener.prototype._serveClient = function(path, req, res){
         write(path);
       }
     });
+    
     return true;
   }
   
@@ -165,9 +144,6 @@ Listener.prototype._serveClient = function(path, req, res){
 };
 
 Listener.prototype._onClientConnect = function(client){
-  if (!(client instanceof Client) || !client.sessionId){
-    return this.options.log('Invalid client');
-  }
   this.clients[client.sessionId] = client;
   this.options.log('Client '+ client.sessionId +' connected');
   this.emit('clientConnect', client);
@@ -185,10 +161,6 @@ Listener.prototype._onClientDisconnect = function(client){
 };
 
 Listener.prototype._onConnection = function(transport, req, res, httpUpgrade, head){
-  if (this.options.transports.indexOf(transport) === -1 || (httpUpgrade && !transports[transport].httpUpgrade)){
-    httpUpgrade ? res.destroy() : req.connection.destroy();
-    return this.options.log('Illegal transport "'+ transport +'"');
-  }
   this.options.log('Initializing client with transport "'+ transport +'"');
   new transports[transport](this, req, res, this.options.transportOptions[transport], head);
 };
