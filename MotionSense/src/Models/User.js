@@ -1,8 +1,5 @@
-exports.user_definition = {
-    properties: ['first', 'last', 'age', 'updated_at'],
-    cast: {
-      age: Number
-    },
+exports.user = {
+    properties: ['fname', 'lname', 'added_at','username', 'password', 'user_id', {'gestures' : [['g_id', 'orgin', {'data':[]},{'event':[['ev_id', 'script']]}]]}],
     getters: {
         full_name: function(){ 
             return this.first + ' ' + this.last 
@@ -10,7 +7,7 @@ exports.user_definition = {
     },
     methods: {
         save: function(fn){
-            this.updated_at = new Date();
+            this.added_at = new Date();
             this.__super__(fn);
         }
     },

@@ -1,0 +1,14 @@
+User model ---
+
+fname - first name
+lname - lastname
+username - username
+password - password
+id_user - id
+gesture - array of gestures
+	  	g_id - gestures id
+		orgin - orgin point of gesture
+		data - array of data points
+		event - event tied to gesture
+		      ev_id - events id
+		      script - the script to be returned executed with event

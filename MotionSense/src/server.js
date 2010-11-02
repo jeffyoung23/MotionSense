@@ -17,18 +17,20 @@ var mongoose = require('mongoose').Mongoose;
 var db = mongoose.connect('mongodb://localhost/motionsensetest');
 
 //Create a model - analogous to collection - model.(name, then definition)
-mongoose.model('User_Model', user.user_definition);
+mongoose.model('User', user.user);
 
 //grab the model from the database
-var User_Model = db.model('User_Model');
+var User = db.model('User');
 
 //Create a new instance of the model
-var u = new User_Model();
+var u = new User();
 
 //set values in the model
-u.first = 'Jimbo';
-u.last = 'Fisher';
-u.age = 54;
+u.fname = 'Jeff';
+u.lname = 'Young';
+u.username = 'wakaflocka3';
+u.password = 'passwordbaby';
+u.user_id = '1';
 
 //save, fires the callback
 u.save(function(){
