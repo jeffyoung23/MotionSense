@@ -1,0 +1,6 @@
+The core of the comparison is nested Levenshtein distance
+
+The inner Levenshtein distances will be 4 point intersection. The ray
+pointing algorithm. Another inner distance will be direction pattern.
+
+Each difference will be added up, and compared.
